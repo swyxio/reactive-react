@@ -40,7 +40,10 @@ function render(element, instance, state, prevState) {
   if (isDomElement) {
     const {children = [], key, ...rest} = props
     const childInstances = children.map(
-      el => render(el, instance, state, prevState)  // recursion
+      (el, i) => {
+        // debugger
+        return render(el, instance.childInstance && instance.childInstance.childInstances && instance.childInstance.childInstances[i], state, prevState)  // recursion
+      }
     );
     const childDoms = childInstances.map(childInstance => childInstance.dom);
     const dom = type === TEXT_ELEMENT
@@ -49,9 +52,10 @@ function render(element, instance, state, prevState) {
       // : new VNode(type, rest, childDoms, key);
     return { dom, element, childInstances }; // instance
   } else {
+    // debugger
     // const publicInstance = createPublicInstance(element); // element may change?
     const publicInstance = instance.publicInstance
-    const childElement = publicInstance.render(state, prevState);
+    const childElement = publicInstance.render ? publicInstance.render(state, prevState): publicInstance;
     const childInstance = render(childElement, instance, state, prevState);
     const dom = childInstance.dom
     return { dom, element, childInstance, publicInstance } // instance
@@ -95,11 +99,12 @@ function instantiate(source$, addToStream) {
       const publicInstance = createPublicInstance(element);
       // console.log({publicInstance, element})
       if (publicInstance.source)
-        addToStream(publicInstance.source(source$)); // extra
-      const childElement = publicInstance.render(INITIALSOURCE);
+      addToStream(publicInstance.source(source$)); // extra
+      const childElement = publicInstance.render ? publicInstance.render(INITIALSOURCE) : publicInstance;
       const childInstance = instantiateWithStream(childElement);
       const dom = childInstance.dom
       const instance = { dom, element, childInstance, publicInstance }
+      // debugger
       return instance
     }
   }

@@ -17,9 +17,13 @@ import Observable from 'zen-observable'
 //   }
 // }
 
+function Boom() {
+    return <h3> owl</h3>
+}
+
 class Test extends Component {
   render() {
-    return <h1>Title</h1>
+    return <h1 style={{color: 'red'}}>Title</h1>
   }
 }
 
@@ -33,8 +37,9 @@ class App extends Component {
   }
   render(state) {
     return <div>
-        {/* <Test/>  */}
+        <Test/> 
         Count: {state}
+        <Boom />
         <button onclick={this.increment}>+</button>
         <button onclick={this.decrement}>-</button>
       </div>
