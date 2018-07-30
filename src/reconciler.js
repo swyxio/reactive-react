@@ -18,78 +18,89 @@ export const INITIALSOURCE = Symbol('initial source')
 // ---
 // returns an unsubscribe method you can use to unmount
 export function mount(element, container) {
-  const source$ = constructStream(element)
-  const initvDOM = render(element)
-  const rootNode = createElement(initvDOM)
-  container.appendChild(rootNode)
+  const {source$, initInstance} = constructStream(element)
+  const rootNode = createElement(initInstance.dom)
+  container.appendChild(rootNode) // initial mount
   return scan(
     source$, 
-    ({vDOM, state}, nextState) => {
-        const nextvDOM = render(element, nextState, state)
-        patch(rootNode, diff(vDOM, nextvDOM)) // side effect
-        return {vDOM: nextvDOM, state: nextState}
-    },
-    {vDOM: initvDOM, state: INITIALSOURCE}
+    ({instance, state}, nextState) => {
+        console.log({state})
+        const nextinstance = render(element, instance, nextState, state)
+        patch(rootNode, diff(instance.dom, nextinstance.dom)) // render to screen
+        return {instance: nextinstance, state: nextState}
+    }
+    ,{instance: initInstance, state: INITIALSOURCE}
   ).subscribe()
 }
 
 // traverse all children and hydrate it with state
-function render(element, state, prevState) {
+function render(element, instance, state, prevState) {
   const { type, props } = element;
   const isDomElement = typeof type === "string";
   if (isDomElement) {
     const {children = [], key, ...rest} = props
-    const childDoms = children.map(
-      el => render(el, state, prevState)  // recursion
+    const childInstances = children.map(
+      el => render(el, instance, state, prevState)  // recursion
     );
-    const isTextElement = type === TEXT_ELEMENT;
-    const dom = isTextElement
+    const childDoms = childInstances.map(childInstance => childInstance.dom);
+    const dom = type === TEXT_ELEMENT
       ? new VText(props.nodeValue)
-      : new VNode(type, rest, childDoms, key);
-    return dom;
+      : h(type, rest, childDoms); // equivalent of appendchild
+      // : new VNode(type, rest, childDoms, key);
+    return { dom, element, childInstances }; // instance
   } else {
-    const instance = {};
-    const publicInstance = createPublicInstance(element, instance);
+    // const publicInstance = createPublicInstance(element); // element may change?
+    const publicInstance = instance.publicInstance
     const childElement = publicInstance.render(state, prevState);
-    const dom = render(childElement, state, prevState);
-    return dom;
+    const childInstance = render(childElement, instance, state, prevState);
+    const dom = childInstance.dom
+    return { dom, element, childInstance, publicInstance } // instance
   }
 }
 
 // traverse all children and collect a stream of all sources
-// this means you cant hot swap streams for now which is impt for a real app
+// AND render. a bit of duplication, but we get persistent instances which is good
 function constructStream(rootEl) {
   // this is the first ping of data throughout the app
   let source$ = Observable.of(INITIALSOURCE) 
-  traverse(source$, source => {
+  const addToStream = source => {
     // visit each source and merge with source$
     if (source) return source$ = merge(source, source$)
-  })(rootEl)
-  return source$
-  /* alternate approach abandoned for now */
-  // // this is the first ping of data throughout the app
-  // let data$ = Observable.of(INITIALSOURCE) 
-  // // start with null view
-  // let view$ = Observable.of(null) 
-  // return {data$, view$}
+  }
+  const initInstance = instantiate(source$, addToStream)(rootEl)
+  return {source$, initInstance}
 }
 
-function traverse(source$, addToStream) {
-  return function traverseWithStream(element){
-    const { type, props } = element;
+function instantiate(source$, addToStream) {
+  return function instantiateWithStream(element){
+    const { type, props } = element
     const isDomElement = typeof type === "string";
-  
     if (isDomElement) {
+      const {children = [], ...rest} = props
+      const childInstances = children.map(instantiateWithStream);
+      const childDoms = childInstances.map(childInstance => childInstance.dom);
+      const dom = type === TEXT_ELEMENT
+        ? new VText(props.nodeValue)
+        : h(type, rest, childDoms); // equivalent of appendchild
+        // : new VNode(type, rest, childDoms, key); // equivalent of appendchild
+
+      // ******
       // updateDomProperties(dom, [], props); // TODO: add event listeners
-      const childElements = props.children || [];
-      childElements.map(traverseWithStream); // recursion
+      // ******
+      const instance = { dom, element, childInstances };
+      return instance;
+
     } else {
-      // Instantiate component element
-      const instance = {};
-      const publicInstance = createPublicInstance(element, instance);
-      addToStream(publicInstance.source(source$));
-      const childElement = publicInstance.render();
-      traverseWithStream(childElement);
+      // component element
+      const publicInstance = createPublicInstance(element);
+      // console.log({publicInstance, element})
+      if (publicInstance.source)
+        addToStream(publicInstance.source(source$)); // extra
+      const childElement = publicInstance.render(INITIALSOURCE);
+      const childInstance = instantiateWithStream(childElement);
+      const dom = childInstance.dom
+      const instance = { dom, element, childInstance, publicInstance }
+      return instance
     }
   }
 }

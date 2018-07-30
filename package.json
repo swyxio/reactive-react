@@ -1,10 +1,21 @@
 {
+  "name": "creatsource",
+  "version": "1.0.0",
+  "license": "MIT",
   "dependencies": {
+    "change-emitter": "^0.1.6",
+    "virtual-dom": "^2.1.1",
     "zen-observable": "^0.8.9"
   },
+  "main": "dist/creat.umd.js",
+  "module": "dist/creat.es.js",
+  "files": [
+    "dist"
+  ],
   "devDependencies": {
     "ava": "^0.19.0",
     "babel-cli": "^6.24.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.3.3",
@@ -15,11 +26,16 @@
     "rollup": "^0.41.6"
   },
   "scripts": {
-    "start": "parcel index.html"
+    "start": "parcel index.html",
+    "build:module": "rollup src/creat.js -f es -n creat -o dist/creat.es.js",
+    "build:main": "rollup src/creat.js -f umd -n creat -o dist/creat.umd.js",
+    "build": "run-p build:module build:main",
+    "prepublishOnly": "npm run build"
   },
   "babel": {
     "plugins": [
       "transform-object-rest-spread",
+      "transform-class-properties",
       [
         "transform-react-jsx",
         {}
@@ -35,9 +51,5 @@
         }
       ]
     ]
-  },
-  "name": "creatsource",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT"
+  }
 }

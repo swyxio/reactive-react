@@ -1,7 +1,7 @@
 import Observable from 'zen-observable'
 export { merge, combineLatest, zip } from 'zen-observable/extras'
 
-export function Ticker(tick = 1000) {
+export function Interval(tick = 1000) {
   return new Observable(observer => {
     let timer = () => setTimeout(() => {
       observer.next('tick');
@@ -25,14 +25,41 @@ export function fromEvent(el, eventType) {
   })
 }
 
-export function scan(obs, cb, initial) {
-  const INIT = Symbol('NO_INITIAL_VALUE')
-  let sub, acc = INIT
-  if (typeof initial !== 'undefined') acc = initial
+const NOINIT = Symbol('NO_INITIAL_VALUE')
+export function scan(obs, cb, seed = NOINIT) {
+  let sub, acc = seed, hasValue = false
+  const hasSeed = acc !== NOINIT
   return new Observable(observer => {
-    if (!sub) sub = obs.subscribe(val => {
-      if (acc !== INIT) acc = cb(acc, val)
-      observer.next(acc)
+    sub = obs.subscribe(value => {
+      // console.log('received', {val})
+      if (observer.closed) return
+      let first = !hasValue;
+      hasValue = true
+
+      if (!first || hasSeed ) {
+        try { acc = cb(acc, value) }
+        catch (e) { return observer.error(e) }
+        observer.next(acc);
+      }
+      else {
+        acc = value
+      }
     })
+    return sub
+  })
+}
+
+export function mapToConstant(obs, val) {
+  return new Observable(observer => {
+    const handler = obs.subscribe(() => observer.next(val))
+    return handler
+  })
+}
+
+export function startWith(obs, val) {
+  return new Observable(observer => {
+    observer.next(val) // immediately output this value
+    const handler = obs.subscribe(x => observer.next(x))
+    return handler
   })
 }

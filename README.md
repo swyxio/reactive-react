@@ -7,30 +7,36 @@ We take a minimal implementation of Observables, zen-observable.
 The React API we are targeting looks something like this:
 
 ```js
-
-class Abc extends Component {
+// with internal timer
+class App extends Component {
   source($) {
-    return Observable.of(1)
+    return scan(
+      Interval(), // tick every second
+      x => x+1, // count up
+      0         // from zero
+    )
   }
-  render($) {
-    return <LabeledSlider />
+  render(state, prevState) {
+    const elapsed = state === INITIALSOURCE ? 0 : state
+    return <div> number of seconds elapsed: {elapsed} </div>
   }
 }
 
-class LabeledSlider extends Component {
-  constructor() {
-    this.myRef = Creat.createRef();
-  }
+// with state
+class App extends Component {
+  increment = createHandler(e => 1)
+  decrement = createHandler(e => -1)
   source($) {
-    return this.myRef()
+    const source$ = merge(this.increment.$, this.decrement.$)
+    const reducer = (acc, n) => acc + n
+    return scan(source$, reducer, 0)
   }
-  render(value, prop$) {
-    return <input 
-      type="range" 
-      min={20} max={80} 
-      value={value} 
-      onInput={this.myRef} 
-    />
+  render(state) {
+    return <div>
+        Count: {state}
+        <button onclick={this.increment}>+</button>
+        <button onclick={this.decrement}>-</button>
+      </div>
   }
 }
 
