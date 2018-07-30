@@ -1,0 +1,43 @@
+{
+  "dependencies": {
+    "zen-observable": "^0.8.9"
+  },
+  "devDependencies": {
+    "ava": "^0.19.0",
+    "babel-cli": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.3.3",
+    "babel-register": "^6.24.1",
+    "browser-env": "^2.0.29",
+    "npm-run-all": "^4.0.2",
+    "parcel-bundler": "^1.9.7",
+    "rollup": "^0.41.6"
+  },
+  "scripts": {
+    "start": "parcel index.html"
+  },
+  "babel": {
+    "plugins": [
+      "transform-object-rest-spread",
+      [
+        "transform-react-jsx",
+        {}
+      ]
+    ],
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ]
+    ]
+  },
+  "name": "creatsource",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT"
+}
