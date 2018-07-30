@@ -42,21 +42,26 @@ function render(element, instance, state, prevState) {
     const childInstances = children.map(
       (el, i) => {
         // debugger
-        return render(el, instance.childInstance && instance.childInstance.childInstances && instance.childInstance.childInstances[i], state, prevState)  // recursion
+        return render(el, instance && instance.childInstance && instance.childInstance.childInstances && instance.childInstance.childInstances[i], state, prevState)  // recursion
       }
     );
     const childDoms = childInstances.map(childInstance => childInstance.dom);
+    let lcaseProps = {}
+    Object.entries(rest).forEach(([k, v]) => lcaseProps[k.toLowerCase()] = v)
     const dom = type === TEXT_ELEMENT
       ? new VText(props.nodeValue)
-      : h(type, rest, childDoms); // equivalent of appendchild
+      : h(type, lcaseProps, childDoms); // equivalent of appendchild
       // : new VNode(type, rest, childDoms, key);
     return { dom, element, childInstances }; // instance
   } else {
     // debugger
     // const publicInstance = createPublicInstance(element); // element may change?
     const publicInstance = instance.publicInstance
-    const childElement = publicInstance.render ? publicInstance.render(state, prevState): publicInstance;
-    const childInstance = render(childElement, instance, state, prevState);
+    const _state = state === INITIALSOURCE ? publicInstance.initialState : state
+    const _prevState = prevState === INITIALSOURCE ? publicInstance.initialState : prevState
+    // debugger
+    const childElement = publicInstance.render ? publicInstance.render(_state, _prevState): publicInstance;
+    const childInstance = render(childElement, instance && instance.childInstance, state, prevState);
     const dom = childInstance.dom
     return { dom, element, childInstance, publicInstance } // instance
   }
@@ -83,9 +88,11 @@ function instantiate(source$, addToStream) {
       const {children = [], ...rest} = props
       const childInstances = children.map(instantiateWithStream);
       const childDoms = childInstances.map(childInstance => childInstance.dom);
+      let lcaseProps = {}
+      Object.entries(rest).forEach(([k, v]) => lcaseProps[k.toLowerCase()] = v)
       const dom = type === TEXT_ELEMENT
         ? new VText(props.nodeValue)
-        : h(type, rest, childDoms); // equivalent of appendchild
+        : h(type, lcaseProps, childDoms); // equivalent of appendchild
         // : new VNode(type, rest, childDoms, key); // equivalent of appendchild
 
       // ******
@@ -97,10 +104,26 @@ function instantiate(source$, addToStream) {
     } else {
       // component element
       const publicInstance = createPublicInstance(element);
-      // console.log({publicInstance, element})
-      if (publicInstance.source)
-      addToStream(publicInstance.source(source$)); // extra
-      const childElement = publicInstance.render ? publicInstance.render(INITIALSOURCE) : publicInstance;
+      if (publicInstance.source) {
+        const src = publicInstance.source(source$)
+        if (src.reducer && publicInstance.initialState !== undefined) 
+          addToStream(scan(src.source$, src.reducer, publicInstance.initialState));
+        else addToStream(src);
+      }
+
+        // if (source) {
+        //   const $ = source(source$)
+        //   if ($.reducer && $.source$ && initialState) {
+        //     addToStream(
+        //       scan($, reducer, initialState)
+        //     );
+        //   } else {
+        //     addToStream($); // extra
+        //   }
+        // }
+      const childElement = publicInstance.render ? 
+          publicInstance.render(publicInstance.initialState) : 
+          publicInstance;
       const childInstance = instantiateWithStream(childElement);
       const dom = childInstance.dom
       const instance = { dom, element, childInstance, publicInstance }

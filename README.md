@@ -8,34 +8,52 @@ The React API we are targeting looks something like this:
 
 ```js
 // with internal timer
-class App extends Component {
+class Timer extends Component {
+  initialState = 0
   source($) {
-    return scan(
-      Interval(), // tick every second
-      x => x+1, // count up
-      0         // from zero
-    )
+    const reducer = x => x + 1 // count up
+    const source$ = Interval(), // tick every second
+    // source returns an observable
+    return scan(source$, reducer, 0) // from zero
   }
   render(state, prevState) {
-    const elapsed = state === INITIALSOURCE ? 0 : state
-    return <div> number of seconds elapsed: {elapsed} </div>
+    return <div> number of seconds elapsed: {state} </div>
   }
 }
 
 // with state
-class App extends Component {
+class Counter extends Component {
   increment = createHandler(e => 1)
   decrement = createHandler(e => -1)
   source($) {
     const source$ = merge(this.increment.$, this.decrement.$)
     const reducer = (acc, n) => acc + n
+    // source returns an observable
     return scan(source$, reducer, 0)
   }
-  render(state) {
+  render(state, prevState) {
     return <div>
         Count: {state}
-        <button onclick={this.increment}>+</button>
-        <button onclick={this.decrement}>-</button>
+        <button onClick={this.increment}>+</button>
+        <button onClick={this.decrement}>-</button>
+      </div>
+  }
+}
+
+// taking info from event handler
+class Echo extends Component {
+  handler = createHandler(e => e.target.value)
+  initialState = 'hello world'
+  source($) {
+    const source$ = this.handler.$
+    const reducer = (acc, n) => n
+    // source returns an object
+    return {source$, reducer}
+  }
+  render(state, prevState) {
+    return <div>
+        <input value={state} onInput={this.handler}/>
+        {state}
       </div>
   }
 }

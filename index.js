@@ -3,48 +3,28 @@ import {mount, createElement, Component, createHandler, INITIALSOURCE} from './s
 import {Interval, scan, startWith, merge, mapToConstant} from './src/swyxjs'
 import Observable from 'zen-observable'
 
-// class App extends Component {
-//   source($) {
-//     return scan(
-//       Interval(), // tick every second
-//       x => x+1, // count up
-//       0         // from zero
-//     )
-//   }
-//   render(state, prevState) {
-//     const elapsed = state === INITIALSOURCE ? 0 : state
-//     return <div> number of seconds elapsed: {elapsed} </div>
-//   }
-// }
-
-function Boom() {
-    return <h3> owl</h3>
-}
-
-class Test extends Component {
-  render() {
-    return <h1 style={{color: 'red'}}>Title</h1>
-  }
-}
-
-class App extends Component {
+class Counter extends Component {
   increment = createHandler(e => 1)
   decrement = createHandler(e => -1)
   source($) {
-    const source$ = merge(this.increment.$, this.decrement.$)
     const reducer = (acc, n) => acc + n
-    return scan(source$, reducer, 0)
+    // source returns an observable
+    return merge(this.increment.$, this.decrement.$)
+            |> (_ => scan(_, reducer, 0))
   }
-  render(state) {
+  render(state, prevState) {
     return <div>
-        <Test/> 
         Count: {state}
-        <Boom />
-        <button onclick={this.increment}>+</button>
-        <button onclick={this.decrement}>-</button>
+        <button onClick={this.increment}>+</button>
+        <button onClick={this.decrement}>-</button>
       </div>
   }
 }
 
+
+
+function App() {
+  return <Counter />
+}
 
 mount(<App />, document.getElementById('app'))
