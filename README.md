@@ -23,6 +23,7 @@ class Timer extends Component {
 
 // with state
 class Counter extends Component {
+  initialState = 0
   increment = createHandler(e => 1)
   decrement = createHandler(e => -1)
   source($) {
