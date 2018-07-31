@@ -22,8 +22,6 @@ class Counter extends Component {
   }
 }
 
-
-
 function App() {
   return <Counter />
 }

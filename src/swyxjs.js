@@ -49,6 +49,26 @@ export function scan(obs, cb, seed = NOINIT) {
   })
 }
 
+// Flatten a collection of observables and only output the newest from each
+export function switch(higherObservable) {
+  return new Observable(observer => {
+    let currentObs = null
+    return higherObservable.subscribe({
+      next(obs) {
+        if (currentObs) currentObs() // unsub and switch
+        currentObs = obs.subscribe(observer.subscribe)
+      },
+      error(e) {
+        observer.error(e) // untested
+      },
+      complete() {
+        // i dont think it should complete?
+        // observer.complete()
+      }
+    })
+  });
+}
+
 export function mapToConstant(obs, val) {
   return new Observable(observer => {
     const handler = obs.subscribe(() => observer.next(val))
