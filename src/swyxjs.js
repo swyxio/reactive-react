@@ -29,9 +29,10 @@ const NOINIT = Symbol('NO_INITIAL_VALUE')
 export function scan(obs, cb, seed = NOINIT) {
   let sub, acc = seed, hasValue = false
   const hasSeed = acc !== NOINIT
+  console.log('scanning', {obs, seed})
   return new Observable(observer => {
     sub = obs.subscribe(value => {
-      // console.log('received', {val})
+      console.log('subscribed', {value})
       if (observer.closed) return
       let first = !hasValue;
       hasValue = true
@@ -50,12 +51,12 @@ export function scan(obs, cb, seed = NOINIT) {
 }
 
 // Flatten a collection of observables and only output the newest from each
-export function switch(higherObservable) {
+export function switchLast(higherObservable) {
   return new Observable(observer => {
     let currentObs = null
     return higherObservable.subscribe({
       next(obs) {
-        if (currentObs) currentObs() // unsub and switch
+        if (currentObs) currentObs.unsubscribe() // unsub and switch
         currentObs = obs.subscribe(observer.subscribe)
       },
       error(e) {
@@ -80,6 +81,6 @@ export function startWith(obs, val) {
   return new Observable(observer => {
     observer.next(val) // immediately output this value
     const handler = obs.subscribe(x => observer.next(x))
-    return handler
+    return () => handler()
   })
 }

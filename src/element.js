@@ -19,9 +19,17 @@ function createTextElement(value) {
 
 export function createHandler(_fn) {
   const emitter = createChangeEmitter()
-  let handler = emitter.emit
+  let handler = x => {
+    console.log(x)
+    emitter.emit(x)
+  }
   handler.$ = new Observable(observer => {
-    return emitter.listen(value => observer.next(_fn ? _fn(value) : value))
+    console.log('listener activated!')
+    return emitter.listen(value => {
+      console.log('LISTENER RECEIVED!', value)
+      observer.next(_fn ? _fn(value) : value)
+    }
+    )
   })
   return handler
 }
