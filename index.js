@@ -22,25 +22,24 @@ import Observable from 'zen-observable'
 //   }
 // }
 
-class Echo extends Component {
-  handler = createHandler(e => console.log('sldkj') || e.target.value)
-  initialState = 'hello world'
+class Timer extends Component {
+  initialState = 0
   source($) {
-    const source$ = this.handler.$
-    const reducer = (_, n) => n
-    // source returns an object
-    return {source$, reducer}
+    const reducer = x => x + 1 // count up
+    const source$ = Interval() // tick every second
+    // source returns an observable
+    return scan(source$, reducer, 0) // from zero
   }
   render(state, prevState) {
-    return <div>
-        <input value={state} onInput={this.handler}/>
-        {state}
-      </div>
+    return <div> number of seconds elapsed: {state} </div>
   }
 }
 
+
 function App() {
-  return <Echo />
+  // return <Echo />
+  // return <Counter />
+  return <Timer />
 }
 
 mount(<App />, document.getElementById('app'))

@@ -24,9 +24,7 @@ export function createHandler(_fn) {
     emitter.emit(x)
   }
   handler.$ = new Observable(observer => {
-    console.log('listener activated!')
     return emitter.listen(value => {
-      console.log('LISTENER RECEIVED!', value)
       observer.next(_fn ? _fn(value) : value)
     }
     )

@@ -12,7 +12,7 @@ class Timer extends Component {
   initialState = 0
   source($) {
     const reducer = x => x + 1 // count up
-    const source$ = Interval(), // tick every second
+    const source$ = Interval() // tick every second
     // source returns an observable
     return scan(source$, reducer, 0) // from zero
   }
