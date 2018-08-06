@@ -12,7 +12,7 @@ var diff = require('virtual-dom/diff');
 var patch = require('virtual-dom/patch');
 var createElement = require('virtual-dom/create-element');
 
-export const INITIALSOURCE = Symbol('initial source')
+export const stateMap = new Map()
 // let circuitBreaker = -20
 
 const emitter = createChangeEmitter()
@@ -41,8 +41,8 @@ export function mount(rootElement, container) {
       /**** main */
       const source2$ = scan(
         src$, 
-        ({instance, state}, nextState) => {
-          const streamOutput = renderStream(rootElement, instance, nextState, state)
+        ({instance, stateMap}, nextState) => {
+          const streamOutput = renderStream(rootElement, instance, nextState, stateMap)
           // console.log({nextState, streamOutput, isNewStream: streamOutput.isNewStream})
           if (streamOutput.isNewStream) { // quick check
             const nextSource$ = streamOutput.source$
@@ -54,7 +54,7 @@ export function mount(rootElement, container) {
             return {instance: nextinstance, state: nextState}
           }
         },
-        {INITIALSOURCE, instance} // accumulator
+        {stateMap, instance} // accumulator
       )
       /**** end main */
       // debugger
@@ -67,7 +67,7 @@ export function mount(rootElement, container) {
 
 // traverse all children and collect a stream of all sources
 // AND render. a bit of duplication, but we get persistent instances which is good
-function renderStream(element, instance, state = INITIALSOURCE, prevState = INITIALSOURCE) {
+function renderStream(element, instance, state, prevState) {
   // this is a separate function because scope gets messy when being recursive
   let isNewStream = false // assume no stream switching by default
   // this is the first ping of data throughout the app
@@ -121,7 +121,7 @@ function render(source$, addToStream, markNewStream) {
       const _prevState = prevState === INITIALSOURCE ? publicInstance.initialState : prevState
       if (publicInstance.source) {
         const src = publicInstance.source(source$)
-        // there are two forms of source
+        // there are two forms of Component.source
         // 1. the reducer form
         if (src.reducer && publicInstance.initialState !== undefined)  {
           addToStream(scan(src.source$, src.reducer, publicInstance.initialState))
@@ -140,44 +140,3 @@ function render(source$, addToStream, markNewStream) {
     return newInstance
   }
 }
-
-
-
-
-
-
-/* obsolute render code, RIP */
-
-// // traverse all children and hydrate it with state
-// function render(element, instance, state, prevState) {
-//   const { type, props } = element;
-//   const isDomElement = typeof type === "string";
-//   if (isDomElement) {
-//     const {children = [], key, ...rest} = props
-//     const childInstances = children.map(
-//       (el, i) => {
-//         // debugger
-//         return render(el, instance && instance.childInstance && instance.childInstance.childInstances && instance.childInstance.childInstances[i], state, prevState)  // recursion
-//       }
-//     );
-//     const childDoms = childInstances.map(childInstance => childInstance.dom);
-//     let lcaseProps = {}
-//     Object.entries(rest).forEach(([k, v]) => lcaseProps[k.toLowerCase()] = v)
-//     const dom = type === TEXT_ELEMENT
-//       ? new VText(props.nodeValue)
-//       : h(type, lcaseProps, childDoms); // equivalent of appendchild
-//       // : new VNode(type, rest, childDoms, key);
-//     return { dom, element, childInstances }; // instance
-//   } else {
-//     // debugger
-//     // const publicInstance = createPublicInstance(element); // element may change?
-//     const publicInstance = instance.publicInstance
-//     const _state = state === INITIALSOURCE ? publicInstance.initialState : state
-//     const _prevState = prevState === INITIALSOURCE ? publicInstance.initialState : prevState
-//     // debugger
-//     const childElement = publicInstance.render ? publicInstance.render(_state, _prevState): publicInstance;
-//     const childInstance = render(childElement, instance && instance.childInstance, state, prevState);
-//     const dom = childInstance.dom
-//     return { dom, element, childInstance, publicInstance } // instance
-//   }
-// }

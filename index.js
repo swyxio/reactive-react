@@ -1,5 +1,5 @@
 /** @jsx createElement */
-import {mount, createElement, Component, createHandler, INITIALSOURCE} from './src/creat'
+import {mount, createElement, Component, createHandler, INITIALSOURCE} from './reactive-react'
 import {Interval, scan, startWith, merge, mapToConstant} from './src/swyxjs'
 import Observable from 'zen-observable'
 
@@ -35,11 +35,27 @@ class Timer extends Component {
   }
 }
 
+class Blink extends Component {
+  initialState = true
+  source($) {
+    const reducer = x => !x
+    // tick every ms milliseconds
+    const source$ = Interval(this.props.ms) 
+    // source can also return an observable
+    return scan(source$, reducer, true)
+  }
+  render(state) {
+    const style = {display: state ? 'block' : 'none'}
+    return <div style={style}>Bring back the blink tag! </div>
+  }
+}
+
 
 function App() {
   // return <Echo />
   // return <Counter />
-  return <Timer />
+  // return <Timer />
+  return <Blink ms={500} />
 }
 
 mount(<App />, document.getElementById('app'))

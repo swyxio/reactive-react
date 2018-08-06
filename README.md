@@ -27,9 +27,12 @@ class Counter extends Component {
   increment = createHandler(e => 1)
   decrement = createHandler(e => -1)
   source($) {
-    const source$ = merge(this.increment.$, this.decrement.$)
+    const source$ = merge(
+      this.increment.$, // creat streamifies the event handler
+      this.decrement.$  // and exposes to you in $
+    )
     const reducer = (acc, n) => acc + n
-    // source returns an observable
+    // 1. source() returns an observable
     return scan(source$, reducer, 0)
   }
   render(state, prevState) {
@@ -48,7 +51,7 @@ class Echo extends Component {
   source($) {
     const source$ = this.handler.$
     const reducer = (acc, n) => n
-    // source returns an object
+    // 2. source() can also return an object
     return {source$, reducer}
   }
   render(state, prevState) {
