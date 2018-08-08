@@ -4,7 +4,7 @@ import {fromEvent} from '../../reactive-react/swyxjs'
 import Observable from 'zen-observable'
 
 import _ from 'lodash';
-// import Charts from './Charts';
+import Charts from './Charts';
 // import Clock from './Clock';
 import './index.css';
 
@@ -44,7 +44,6 @@ export class App extends Component {
   render(state, stateMap) {
     const Wrapper = 'div'
     const data = this.getStreamData(state);
-    console.log({state})
     return (
       <div className="container">
         <input
@@ -55,9 +54,9 @@ export class App extends Component {
           onInput={this.handleChange}
         />
         <Wrapper>
-          <div className="demo">
-            {/* <Charts data={data} /> */}
-            {JSON.stringify(data)}
+          <div className="demo" id="demo">
+            <Charts data={data} />
+            <p>{JSON.stringify(data)}</p>
           </div>
         </Wrapper>
       </div>

@@ -50,7 +50,7 @@ export function render(source, addToStream, markNewStream) { // this is the nonr
       );
       const childDoms = childInstances.map(childInstance => childInstance.dom);
       let lcaseProps = {}
-      Object.entries(rest).forEach(([k, v]) => lcaseProps[k.toLowerCase()] = v)
+      Object.entries(rest).forEach(([k, v]) => lcaseProps[formatProps(k)] = v)
       const dom = type === TEXT_ELEMENT
         ? new VText(props.nodeValue)
         : h(type, lcaseProps, childDoms); // equivalent of appendchild
@@ -86,6 +86,8 @@ export function render(source, addToStream, markNewStream) { // this is the nonr
           }) 
         );
       }
+      // console.log({type, publicInstance, props})
+      publicInstance.props = props // update with new props?
       const childElement = publicInstance.render ? 
           publicInstance.render(localState, stateMap) : 
           publicInstance;
@@ -96,4 +98,10 @@ export function render(source, addToStream, markNewStream) { // this is the nonr
     }
     return newInstance
   }
+}
+
+function formatProps(k) {
+  // console.log({k})
+  if (k.startsWith('on')) return k.toLowerCase()
+  return k
 }
