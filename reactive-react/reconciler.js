@@ -16,9 +16,9 @@ export function renderStream(element, instance, state, stateMap) {
   let isNewStream = false // assume no stream switching by default
   // this is the first ping of data throughout the app
   let source = Observable.of(state) 
-  const addToStream = source => {
+  const addToStream = _source => {
     // visit each source and merge with source
-    if (source) return source = merge(source, source)
+    if (_source) return source = merge(source, _source)
   }
   const markNewStream = () => isNewStream = true
   const newInstance = render(source, addToStream, markNewStream)(element, instance, state, stateMap)
@@ -69,6 +69,7 @@ export function render(source, addToStream, markNewStream) { // this is the nonr
       // debugger
       let localState = stateMap.get(publicInstance)
       if (localState === undefined) localState = publicInstance.initialState
+      publicInstance.state = localState // for access with this.state
       if (publicInstance.source) {
         const src = publicInstance.source(source)
         // there are two forms of Component.source
@@ -79,6 +80,7 @@ export function render(source, addToStream, markNewStream) { // this is the nonr
             src
         addToStream(src$
           .map(event => {
+            // console.log({event})
             stateMap.set(publicInstance, event)
             return {instance: publicInstance, event} // tag it to the instance
           }) 

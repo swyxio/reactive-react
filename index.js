@@ -90,7 +90,7 @@ class CrappyBird extends Component {
 
 function App() {
   // return <Echo />
-  // return <Counter />
+  // return <Counter name="counter a" />
   // return <Timer />
   // return <Blink ms={500} />
   return <CrappyBird />

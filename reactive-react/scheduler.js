@@ -37,6 +37,8 @@ export function mount(rootElement, container) {
   let SoS = startWith(UIthread, source) // stream of streams
   return SoS.subscribe(
     src$ => { // this is the current sourceStream we are working with
+      // console.log({src$})
+      // src$.subscribe(x => console.log({x}))
       if (currentSrc$) console.log('unsub!') || currentSrc$.unsubscribe() // unsub from old stream
       if (circuitBreaker++ > 0) debugger
       /**** main */
