@@ -14,7 +14,7 @@ const emitter = createChangeEmitter()
 // single UI thread; this is the observable that sticks around and swaps out source
 const UIthread = new Observable(observer => {
   emitter.listen(x => {
-    debugger // success! thread switching!
+    // debugger // success! thread switching!
     observer.next(x)
   })
 })
@@ -26,6 +26,7 @@ const UIthread = new Observable(observer => {
 export function mount(rootElement, container) {
   // initial, throwaway-ish frame
   let {source, instance} = renderStream(rootElement, {}, undefined, stateMapPointer)
+  let instancePointer = instance
   const rootNode = createElement(instance.dom)
   const containerChild = container.firstElementChild
   if (containerChild) {
@@ -37,19 +38,17 @@ export function mount(rootElement, container) {
   let SoS = startWith(UIthread, source) // stream of streams
   return SoS.subscribe(
     src$ => { // this is the current sourceStream we are working with
-      // console.log({src$})
-      // src$.subscribe(x => console.log({x}))
       if (currentSrc$) console.log('unsub!') || currentSrc$.unsubscribe() // unsub from old stream
-      if (circuitBreaker++ > 0) debugger
       /**** main */
       const source2$ = scan(
         src$, 
         ({instance, stateMap}, nextState) => {
           const streamOutput = renderStream(rootElement, instance, nextState, stateMap)
-          // console.log({nextState, streamOutput, isNewStream: streamOutput.isNewStream})
           if (streamOutput.isNewStream) { // quick check
             const nextSource$ = streamOutput.source
-            debugger
+            // debugger
+            instancePointer = streamOutput.instance
+            patch(rootNode, diff(instance.dom, instancePointer.dom)) // render to screen
             emitter.emit(nextSource$) // update the UI thread; source will switch
           } else {
             const nextinstance = streamOutput.instance
@@ -57,10 +56,9 @@ export function mount(rootElement, container) {
             return {instance: nextinstance, stateMap: stateMap}
           }
         },
-        {instance, stateMap: stateMapPointer} // accumulator
+        {instance: instancePointer, stateMap: stateMapPointer} // accumulator
       )
       /**** end main */
-      // debugger
       currentSrc$ = 
         source2$
           .subscribe()

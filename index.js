@@ -3,52 +3,66 @@ import {mount, createElement, Component, createHandler} from './reactive-react'
 import {Interval, scan, startWith, merge, mapToConstant} from './reactive-react/swyxjs'
 import Observable from 'zen-observable'
 
-// class Counter extends Component {
-//   initialState = 0
-//   increment = createHandler(e => 1)
-//   decrement = createHandler(e => -1)
-//   source($) {
-//     const source = merge(this.increment.$, this.decrement.$)
-//     const reducer = (acc, n) => acc + n
-//     return {source, reducer}
-//   }
-//   render(state, prevState) {
-//     const {name = "counter"} = this.props
-//     return <div>
-//         {name}: {state}
-//         <button onClick={this.increment}>+</button>
-//         <button onClick={this.decrement}>-</button>
-//       </div>
-//   }
-// }
 
-// class Timer extends Component {
-//   initialState = 0
-//   source($) {
-//     const reducer = x => x + 1 // count up
-//     const source = Interval() // tick every second
-//     // source returns an observable
-//     return scan(source, reducer, 0) // from zero
-//   }
-//   render(state, prevState) {
-//     return <div> number of seconds elapsed: {state} </div>
-//   }
-// }
+function App() {
+  // return <Counter name="counter a" />
+  // return <Timer />
+  // return <Blink ms={500} />
+  // return <CrappyBird />
+  return <SourceSwitching 
+            // left={<Counter name="counter b" />} 
+            left={<Timer ms={1000}/>} 
+            right={<Counter name="counter a" />}
+          />
+}
 
-// class Blink extends Component {
-//   initialState = true
-//   source($) {
-//     const reducer = x => !x
-//     // tick every ms milliseconds
-//     const source = Interval(this.props.ms) 
-//     // source can also return an observable
-//     return scan(source, reducer, true)
-//   }
-//   render(state) {
-//     const style = {display: state ? 'block' : 'none'}
-//     return <div style={style}>Bring back the blink tag! </div>
-//   }
-// }
+
+class Counter extends Component {
+  initialState = 0
+  increment = createHandler(e => 1)
+  decrement = createHandler(e => -1)
+  source($) {
+    const source = merge(this.increment.$, this.decrement.$)
+    const reducer = (acc, n) => acc + n
+    return {source, reducer}
+  }
+  render(state, stateMap) {
+    const {name = "counter"} = this.props
+    return <div>
+        {name}: {state}
+        <button onClick={this.increment}>+</button>
+        <button onClick={this.decrement}>-</button>
+      </div>
+  }
+}
+
+class Timer extends Component {
+  initialState = 0
+  source($) {
+    const reducer = x => x + 1 // count up
+    const source = Interval(this.props.ms) // tick every second
+    // source returns an observable
+    return scan(source, reducer, 0) // from zero
+  }
+  render(state, stateMap) {
+    return <div> number of seconds elapsed: {state} </div>
+  }
+}
+
+class Blink extends Component {
+  initialState = true
+  source($) {
+    const reducer = x => !x
+    // tick every ms milliseconds
+    const source = Interval(this.props.ms) 
+    // source can also return an observable
+    return scan(source, reducer, true)
+  }
+  render(state) {
+    const style = {display: state ? 'block' : 'none'}
+    return <div style={style}>Bring back the blink tag! </div>
+  }
+}
 
 
 
@@ -76,7 +90,7 @@ class CrappyBird extends Component {
       }
     })
   }
-  render(state, prevState) {
+  render(state, stateMap) {
     const {input, target} = state
     return <div>
         <button onClick={this.increment}>+</button>
@@ -87,13 +101,24 @@ class CrappyBird extends Component {
   }
 }
 
-
-function App() {
-  // return <Echo />
-  // return <Counter name="counter a" />
-  // return <Timer />
-  // return <Blink ms={500} />
-  return <CrappyBird />
+class SourceSwitching extends Component {
+  initialState = true
+  toggle = createHandler()
+  source($) {
+    const source = this.toggle.$
+    const reducer = x => !x
+    return {source, reducer}
+  }
+  render(state, stateMap) {
+    console.log({state})
+    return <div>
+        <button onClick={this.toggle}>Toggle</button>
+        {
+          state ? this.props.left : this.props.right
+        }
+      </div>
+  }
 }
+
 
 mount(<App />, document.getElementById('app'))

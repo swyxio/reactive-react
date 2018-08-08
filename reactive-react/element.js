@@ -20,12 +20,10 @@ function createTextElement(value) {
 export function createHandler(_fn) {
   const emitter = createChangeEmitter()
   let handler = x => {
-    // console.log(x)
     emitter.emit(x)
   }
   handler.$ = new Observable(observer => {
     return emitter.listen(value => {
-      // console.log(value)
       observer.next(_fn ? _fn(value) : value)
     }
     )

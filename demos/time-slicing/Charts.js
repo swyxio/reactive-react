@@ -1,15 +1,5 @@
 /** @jsx createElement */
 import {mount, createElement, Component, createHandler} from '../../reactive-react'
-// import React, {Component} from 'react'
-// import {
-//   VictoryArea,
-//   VictoryAxis,
-//   VictoryChart,
-//   VictoryBar,
-//   VictoryTheme,
-//   VictoryScatter,
-//   VictoryStack,
-// } from 'victory';
 import * as d3 from "d3";
 
 const colors = ['#fff489', '#fa57c1', '#b166cc', '#7572ff', '#69a6f9'];
@@ -17,8 +7,6 @@ const colors = ['#fff489', '#fa57c1', '#b166cc', '#7572ff', '#69a6f9'];
 export default class Charts extends Component {
   render() {
     const data = this.props.data;
-    // const data = streamData // [streamData[0]]
-    console.log({data})
     const container = document.getElementById("demo")
     if (!container) return <div>Type something</div> // initial load only
     bottomChart(data)

@@ -7,8 +7,8 @@ var h = require('virtual-dom/h');
 // var VNode = require("virtual-dom/vnode/vnode")
 var VText = require("virtual-dom/vnode/vtext")
 
-const circuitBreakerflag = false // set true to enable debugger in infinite loops
-let circuitBreaker = -50
+// const circuitBreakerflag = false // set true to enable debugger in infinite loops
+// let circuitBreaker = -50
 // traverse all children and collect a stream of all sources
 // AND render. a bit of duplication, but we get persistent instances which is good
 export function renderStream(element, instance, state, stateMap) {
@@ -30,22 +30,21 @@ export function render(source, addToStream, markNewStream) { // this is the nonr
   return function renderWithStream(element, instance, state, stateMap) { // recursive part
     let newInstance
     const { type, props } = element
+  
     const isDomElement = typeof type === "string";
-    if (circuitBreakerflag && circuitBreaker++ > 0) debugger
+    // if (circuitBreakerflag && circuitBreaker++ > 0) debugger
+    const {children = [], ...rest} = props
     if (isDomElement) {
-      const {children = [], ...rest} = props
       const childInstances = children.map(
         (el, i) => {
           // ugly but necessary to allow functional children
           // mapping element's children to instance's childInstances
-          // console.log({instance})
           const _childInstances = instance && (instance.childInstance || instance.childInstances[i])
-          // debugger
-          return renderWithStream(
+          return renderWithStream(  // recursion
             el, 
             _childInstances, 
             state, 
-            stateMap)  // recursion
+            stateMap) 
         }
       );
       const childDoms = childInstances.map(childInstance => childInstance.dom);
@@ -57,20 +56,19 @@ export function render(source, addToStream, markNewStream) { // this is the nonr
       newInstance = { dom, element, childInstances };
     } else { // component element
       let publicInstance 
-      if (instance && instance.publicInstance) { // might have to do more diffing of props
+      // debugger
+      if (instance && instance.publicInstance && instance.element === element) { // might have to do more diffing of props
         // just reuse old instance if it already exists
         publicInstance = instance && instance.publicInstance
       } else {
-        // debugger
         markNewStream() // mark as dirty in parent scope; will rerender
         publicInstance = createPublicInstance(element);
       }
-      // const localState = state === INITIALSOURCE ? publicInstance.initialState : state
-      // debugger
       let localState = stateMap.get(publicInstance)
       if (localState === undefined) localState = publicInstance.initialState
       publicInstance.state = localState // for access with this.state
-      publicInstance.props = props // update with new props
+      if (Object.keys(rest).length) publicInstance.props = rest // update with new props // TODO: potentially buggy
+      // console.log({rest})
       if (publicInstance.source) {
         const src = publicInstance.source(source)
         // there are two forms of Component.source
@@ -81,7 +79,6 @@ export function render(source, addToStream, markNewStream) { // this is the nonr
             src
         addToStream(src$
           .map(event => {
-            // console.log({event})
             stateMap.set(publicInstance, event)
             return {instance: publicInstance, event} // tag it to the instance
           }) 
@@ -90,7 +87,7 @@ export function render(source, addToStream, markNewStream) { // this is the nonr
       const childElement = publicInstance.render ? 
           publicInstance.render(localState, stateMap) : 
           publicInstance;
-      // if (circuitBreaker++ > 0) debugger
+
       const childInstance = renderWithStream(childElement, instance && instance.childInstance, state, stateMap)
       const dom = childInstance.dom
       newInstance = { dom, element, childInstance, publicInstance }
@@ -100,7 +97,6 @@ export function render(source, addToStream, markNewStream) { // this is the nonr
 }
 
 function formatProps(k) {
-  // console.log({k})
   if (k.startsWith('on')) return k.toLowerCase()
   return k
 }
