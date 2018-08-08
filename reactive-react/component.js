@@ -20,7 +20,10 @@ export class Component {
       // straight stream form
       // or object form where we need to scan it into string
       if (subReducer.source && subReducer.reducer) { // object form
-        subReducer = scan(subReducer.source, subReducer.reducer, this.initialState[k])
+        subReducer = scan(subReducer.source, 
+          subReducer.reducer || ((_, n) => n), 
+          this.initialState[k]
+        )
       }
       return subReducer
         .map(x => ({[k]: x})) // map to its particular namespace
