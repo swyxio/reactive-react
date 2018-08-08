@@ -7,8 +7,8 @@ var h = require('virtual-dom/h');
 // var VNode = require("virtual-dom/vnode/vnode")
 var VText = require("virtual-dom/vnode/vtext")
 
-// const circuitBreakerflag = false // set true to enable debugger in infinite loops
-// let circuitBreaker = -50
+const circuitBreakerflag = true // set true to enable debugger in infinite loops
+let circuitBreaker = -1000
 // traverse all children and collect a stream of all sources
 // AND render. a bit of duplication, but we get persistent instances which is good
 export function renderStream(element, instance, state, stateMap) {
@@ -32,7 +32,7 @@ export function render(source, addToStream, markNewStream) { // this is the nonr
     const { type, props } = element
   
     const isDomElement = typeof type === "string";
-    // if (circuitBreakerflag && circuitBreaker++ > 0) debugger
+    if (circuitBreakerflag && circuitBreaker++ > 0) debugger
     const {children = [], ...rest} = props
     if (isDomElement) {
       const childInstances = children.map(
@@ -57,10 +57,12 @@ export function render(source, addToStream, markNewStream) { // this is the nonr
     } else { // component element
       let publicInstance 
       // debugger
-      if (instance && instance.publicInstance && instance.element === element) { // might have to do more diffing of props
+      if (instance && instance.publicInstance && instance.element.type === element.type) { // might have to do more diffing of props
         // just reuse old instance if it already exists
         publicInstance = instance && instance.publicInstance
       } else {
+        // console.log(instance, element, instance && instance.element === element)
+        // debugger
         markNewStream() // mark as dirty in parent scope; will rerender
         publicInstance = createPublicInstance(element);
       }
@@ -74,7 +76,9 @@ export function render(source, addToStream, markNewStream) { // this is the nonr
         // there are two forms of Component.source
         const src$ = src.reducer && publicInstance.initialState !== undefined ? 
             // 1. the reducer form
-            scan(src.source, src.reducer, publicInstance.initialState) : 
+            scan(src.source, 
+              src.reducer || ((_, x) => x), // default to noop reducer
+              publicInstance.initialState) : 
             // 2. and raw stream form
             src
         addToStream(src$

@@ -5,7 +5,8 @@ import Observable from 'zen-observable'
 
 
 function App() {
-  return <Counter name="Counter Count:"/>
+  return <TimeTravel />
+  // return <Counter name="Counter Count:"/>
   // return <Counters/>
   // return <Timer />
   // return <Blink ms={500} />
@@ -13,9 +14,96 @@ function App() {
   // return <Source />
 }
 
+class TimeTravel extends Component {
+  handler = createHandler(e => {
+    // this.states.splice(this.stateIndex++, 0, e.target.value)
+    return e.target.value
+  })
+  undo = createHandler(e => 'UNDO')
+  redo = createHandler(e => 'REDO')
+  initialState = {
+    value: 'hello world',
+    history: {
+      states: [],
+      stateIndex: 0
+    }
+  }
+  source($) {
+    return this.combineReducer({
+      value: () => {
+        return {source: this.handler.$}
+      },
+      history: () => {
+        const source = merge(this.undo.$, this.redo.$)
+        const reducer = (acc, n) => {
+          console.log({acc, n})
+          return n
+          // let newIndex
+          // switch (n) {
+          //   case 'UNDO': 
+          //     newIndex = this.stateIndex < 1 ? 0 : --this.stateIndex
+          //     return this.states[newIndex]
+          //   case 'REDO': 
+          //     newIndex = this.stateIndex > (this.states.length - 1) ? this.states.length : ++this.stateIndex
+          //     return this.states[newIndex]
+          //   default:
+          //     return n
+          // } 
+        }
+        return {source, reducer}
+      }
+    })
+  }
+  render(state, prevState) {
+    return <div>
+        <button onClick={this.undo}>undo</button>
+        <button onClick={this.redo}>redo</button>
+        <input value={state} onInput={this.handler}/>
+        {state}
+      </div>
+  }
+}
+
+// class TimeTravel extends Component {
+//   states = []
+//   stateIndex = 0
+//   handler = createHandler(e => {
+//     this.states.splice(this.stateIndex++, 0, e.target.value)
+//     return e.target.value
+//   })
+//   undo = createHandler(e => 'UNDO')
+//   redo = createHandler(e => 'REDO')
+//   initialState = 'hello world'
+//   source($) {
+//     const source = merge(this.handler.$, this.undo.$, this.redo.$)
+//     const reducer = (acc, n) => {
+//       let newIndex
+//       switch (n) {
+//         case 'UNDO': 
+//           newIndex = this.stateIndex < 1 ? 0 : --this.stateIndex
+//           return this.states[newIndex]
+//         case 'REDO': 
+//           newIndex = this.stateIndex > (this.states.length - 1) ? this.states.length : ++this.stateIndex
+//           return this.states[newIndex]
+//         default:
+//           return n
+//       } 
+//     }
+//     return {source, reducer}
+//   }
+//   render(state, prevState) {
+//     return <div>
+//         <button onClick={this.undo}>undo</button>
+//         <button onClick={this.redo}>redo</button>
+//         <input value={state} onInput={this.handler}/>
+//         {state}
+//       </div>
+//   }
+// }
+
 function Counters() {
   // demonstrate independent states
-  return <div>
+    return <div>
     <Counter name="counter a" />
     <Counter name="counter b" />
     </div>
@@ -113,6 +201,23 @@ class CrappyBird extends Component {
         <h1>Crappy bird</h1>
         <p>Bird: <input type="range" value={input} min={0} max={100} /></p>
         <p>Target: <input type="range" value={Math.round(target)} min={0} max={100} /></p>
+      </div>
+  }
+}
+
+// taking info from event handler
+class Echo extends Component {
+  handler = createHandler(e => e.target.value)
+  initialState = 'hello world'
+  source($) {
+    const source = this.handler.$
+    const reducer = (acc, n) => n
+    return {source, reducer}
+  }
+  render(state, prevState) {
+    return <div>
+        <input value={state} onInput={this.handler}/>
+        {state}
       </div>
   }
 }

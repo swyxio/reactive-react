@@ -5,6 +5,8 @@ export class Component {
   constructor(props) {
     this.props = props;
     this.state = this.state || {};
+    this._stateHistory = []
+    this._stateIndex = null
   }
 
   // setState(partialState) {
@@ -16,11 +18,12 @@ export class Component {
   combineReducer(obj) {
     const sources = Object.entries(obj).map(([k,fn]) => {
       let subReducer = fn(obj)
+      console.log({k, subReducer})
       // there are two forms of return the subreducer can have
       // straight stream form
       // or object form where we need to scan it into string
-      if (subReducer.source && subReducer.reducer) { // object form
-        subReducer = scan(subReducer.source, subReducer.reducer, this.initialState[k])
+      if (subReducer.source) { // object form
+        subReducer = scan(subReducer.source, subReducer.reducer || ((_, n) => n), this.initialState[k])
       }
       return subReducer
         .map(x => ({[k]: x})) // map to its particular namespace
