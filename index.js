@@ -5,19 +5,32 @@ import Observable from 'zen-observable'
 
 
 function App() {
-  // return <Counter name="counter a" />
+  return <Counter name="Counter Count:"/>
+  // return <Counters/>
   // return <Timer />
   // return <Blink ms={500} />
   // return <CrappyBird />
-  return <SourceSwitching 
-            // left={<Counter name="counter b" />} 
-            left={<Timer ms={1000}/>} 
-            right={<Counter name="counter a" />}
-          />
+  // return <Source />
 }
 
+function Counters() {
+  // demonstrate independent states
+  return <div>
+    <Counter name="counter a" />
+    <Counter name="counter b" />
+    </div>
+}
+function Source() {
+  // demonstrate ability to switch sources
+  return <SourceSwitching 
+          // left={<Counter name="counter b" />} 
+          left={<Timer ms={1000}/>} 
+          right={<Counter name="counter a" />}
+        />
+}
 
 class Counter extends Component {
+  // demonstrate basic counter
   initialState = 0
   increment = createHandler(e => 1)
   decrement = createHandler(e => -1)
@@ -37,6 +50,7 @@ class Counter extends Component {
 }
 
 class Timer extends Component {
+  // demonstrate interval time
   initialState = 0
   source($) {
     const reducer = x => x + 1 // count up
@@ -50,6 +64,7 @@ class Timer extends Component {
 }
 
 class Blink extends Component {
+  // more fun time demo
   initialState = true
   source($) {
     const reducer = x => !x
@@ -68,6 +83,7 @@ class Blink extends Component {
 
 
 class CrappyBird extends Component {
+  // merging time and coutner
   initialState = {
     input: 50,
     target: 50
