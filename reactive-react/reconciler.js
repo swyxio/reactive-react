@@ -70,6 +70,7 @@ export function render(source, addToStream, markNewStream) { // this is the nonr
       let localState = stateMap.get(publicInstance)
       if (localState === undefined) localState = publicInstance.initialState
       publicInstance.state = localState // for access with this.state
+      publicInstance.props = props // update with new props
       if (publicInstance.source) {
         const src = publicInstance.source(source)
         // there are two forms of Component.source
@@ -86,8 +87,6 @@ export function render(source, addToStream, markNewStream) { // this is the nonr
           }) 
         );
       }
-      // console.log({type, publicInstance, props})
-      publicInstance.props = props // update with new props?
       const childElement = publicInstance.render ? 
           publicInstance.render(localState, stateMap) : 
           publicInstance;

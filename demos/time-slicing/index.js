@@ -36,7 +36,7 @@ export class App extends Component {
   handleChange = createHandler(e => e.target.value)
   source() {
     return {
-      source: this.handleChange.$.map(x => console.log({x}) || x),
+      source: this.handleChange.$,
       reducer: (_, x) => x
     }
   }
@@ -56,7 +56,6 @@ export class App extends Component {
         <Wrapper>
           <div className="demo" id="demo">
             <Charts data={data} />
-            <p>{JSON.stringify(data)}</p>
           </div>
         </Wrapper>
       </div>
