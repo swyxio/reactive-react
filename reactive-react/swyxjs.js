@@ -1,10 +1,11 @@
 import Observable from 'zen-observable'
 export { merge, combineLatest, zip } from 'zen-observable/extras'
 
-export function Interval(tick = 1000) {
+export function Interval(tick = 1000, tickData = Symbol('tick')) {
   return new Observable(observer => {
     let timer = () => setTimeout(() => {
-      observer.next('tick');
+      if (typeof tickData === 'function') tickData = tickData()
+      observer.next(tickData);
       timer()
       // observer.complete();
     }, tick);

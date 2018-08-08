@@ -12,9 +12,9 @@ class Timer extends Component {
   initialState = 0
   source($) {
     const reducer = x => x + 1 // count up
-    const source$ = Interval() // tick every second
+    const source = Interval() // tick every second
     // source returns an observable
-    return scan(source$, reducer, 0) // from zero
+    return scan(source, reducer, 0) // from zero
   }
   render(state, prevState) {
     return <div> number of seconds elapsed: {state} </div>
@@ -27,13 +27,13 @@ class Counter extends Component {
   increment = createHandler(e => 1)
   decrement = createHandler(e => -1)
   source($) {
-    const source$ = merge(
+    const source = merge(
       this.increment.$, // creat streamifies the event handler
       this.decrement.$  // and exposes to you in $
     )
     const reducer = (acc, n) => acc + n
     // 1. source() returns an observable
-    return scan(source$, reducer, 0)
+    return scan(source, reducer, 0)
   }
   render(state, prevState) {
     return <div>
@@ -49,10 +49,10 @@ class Echo extends Component {
   handler = createHandler(e => e.target.value)
   initialState = 'hello world'
   source($) {
-    const source$ = this.handler.$
+    const source = this.handler.$
     const reducer = (acc, n) => n
     // 2. source() can also return an object
-    return {source$, reducer}
+    return {source, reducer}
   }
   render(state, prevState) {
     return <div>

@@ -1,13 +1,16 @@
 import { createElement, createHandler } from "./element";
 import { Component } from "./component";
-import { mount, INITIALSOURCE } from "./reconciler";
+// import { INITIALSOURCE } from "./reconciler";
+import { mount } from "./scheduler";
 
 export default {
-  INITIALSOURCE,
+  // INITIALSOURCE,
   createElement,
   createHandler,
   Component,
   mount
 };
 
-export { createElement, createHandler, Component, INITIALSOURCE, mount };
+export { createElement, createHandler, Component, 
+  // INITIALSOURCE, 
+  mount };

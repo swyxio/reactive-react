@@ -1,4 +1,5 @@
 // import { reconcile } from "./reconciler";
+import {Interval, scan, startWith, merge, mapToConstant} from './swyxjs'
 
 export class Component {
   constructor(props) {
@@ -10,6 +11,24 @@ export class Component {
   //   this.state = Object.assign({}, this.state, partialState);
   //   updateInstance(this.__internalInstance);
   // }
+
+  // class method because it feeds in this.initialState
+  combineReducer(obj) {
+    const sources = Object.entries(obj).map(([k,fn]) => {
+      let subReducer = fn(obj)
+      // there are two forms of return the subreducer can have
+      // straight stream form
+      // or object form where we need to scan it into string
+      if (subReducer.source && subReducer.reducer) { // object form
+        subReducer = scan(subReducer.source, subReducer.reducer, this.initialState[k])
+      }
+      return subReducer
+        .map(x => ({[k]: x})) // map to its particular namespace
+    })
+    const source = merge(...sources)
+    const reducer = (acc, n) => ({...acc, ...n})
+    return {source, reducer}
+  }
 }
 
 // function updateInstance(internalInstance) {
