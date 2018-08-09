@@ -13,22 +13,6 @@ function App() {
   // return <Source />
 }
 
-function Counters() {
-  // demonstrate independent states
-  return <div>
-    <Counter name="counter a" />
-    <Counter name="counter b" />
-    </div>
-}
-function Source() {
-  // demonstrate ability to switch sources
-  return <SourceSwitching 
-          // left={<Counter name="counter b" />} 
-          left={<Timer ms={1000}/>} 
-          right={<Counter name="counter a" />}
-        />
-}
-
 class Counter extends Component {
   // demonstrate basic counter
   initialState = 0
@@ -53,8 +37,8 @@ class Timer extends Component {
   // demonstrate interval time
   initialState = 0
   source($) {
-    const reducer = x => x + 1 // count up
     const source = Interval(this.props.ms) // tick every second
+    const reducer = x => x + 1 // count up
     // source returns an observable
     return scan(source, reducer, 0) // from zero
   }
@@ -78,9 +62,6 @@ class Blink extends Component {
     return <div style={style}>Bring back the blink tag! </div>
   }
 }
-
-
-
 
 class CrappyBird extends Component {
   // merging time and coutner
@@ -126,7 +107,6 @@ class SourceSwitching extends Component {
     return {source, reducer}
   }
   render(state, stateMap) {
-    console.log({state})
     return <div>
         <button onClick={this.toggle}>Toggle</button>
         {
@@ -136,5 +116,20 @@ class SourceSwitching extends Component {
   }
 }
 
+function Counters() {
+  // demonstrate independent states
+  return <div>
+    <Counter name="counter a" />
+    <Counter name="counter b" />
+    </div>
+}
+function Source() {
+  // demonstrate ability to switch sources
+  return <SourceSwitching 
+          // left={<Counter name="counter b" />} 
+          left={<Timer ms={1000}/>} 
+          right={<Counter name="counter a" />}
+        />
+}
 
 mount(<App />, document.getElementById('app'))

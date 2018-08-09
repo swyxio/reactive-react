@@ -29,6 +29,7 @@
   "scripts": {
     "start": "parcel index.html",
     "start:time": "parcel demos/time-slicing/index.html",
+    "demo:time": "parcel build demos/time-slicing/index.html -d demos/time-slicing/dist/",
     "build:module": "rollup src/reactive-react.js -f es -n reactive-react -o dist/reactive-react.es.js",
     "build:main": "rollup src/reactive-react.js -f umd -n reactive-react -o dist/reactive-react.umd.js",
     "build": "run-p build:module build:main",
