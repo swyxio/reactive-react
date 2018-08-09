@@ -1,5 +1,5 @@
 /** @jsx createElement */
-import {mount, createElement, Component, createHandler} from '../../reactive-react'
+import {mount, createElement, Component, createHandler} from '../../reactivereact'
 import * as d3 from "d3";
 
 const colors = ['#fff489', '#fa57c1', '#b166cc', '#7572ff', '#69a6f9'];

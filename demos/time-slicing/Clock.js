@@ -1,5 +1,5 @@
 // /** @jsx createElement */
-// import {mount, createElement, Component, createHandler} from '../../reactive-react'
+// import {mount, createElement, Component, createHandler} from '../../reactivereact'
 
 // const SPEED = 0.003 / Math.PI;
 // const FRAMES = 10;

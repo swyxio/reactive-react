@@ -1,6 +1,6 @@
 /** @jsx createElement */
-import {mount, createElement, Component, createHandler} from '../../reactive-react'
-import {fromEvent} from '../../reactive-react/swyxjs'
+import {mount, createElement, Component, createHandler} from '../../reactivereact'
+import {fromEvent} from '../../reactivereact/swyxjs'
 import Observable from 'zen-observable'
 
 import _ from 'lodash';

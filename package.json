@@ -1,5 +1,5 @@
 {
-  "name": "reactive-react",
+  "name": "reactivereact",
   "version": "1.0.0",
   "license": "MIT",
   "dependencies": {
@@ -8,8 +8,8 @@
     "virtual-dom": "^2.1.1",
     "zen-observable": "^0.8.9"
   },
-  "main": "build/reactive-react.umd.js",
-  "module": "build/reactive-react.es.js",
+  "main": "build/reactivereact.umd.js",
+  "module": "build/reactivereact.es.js",
   "files": [
     "build"
   ],
@@ -31,10 +31,10 @@
     "start": "parcel index.html",
     "start:time": "parcel demos/time-slicing/index.html",
     "demo:time": "parcel build demos/time-slicing/index.html -d demos/time-slicing/build/",
-    "build:module": "rollup -c -f es -n reactive-react -o build/reactive-react.es.js",
-    "oldbuild:module": "rollup reactive-react/index.js -f es -n reactive-react -o build/reactive-react.es.js",
-    "build:main": "rollup -c -f umd -n reactive-react -o build/reactive-react.umd.js",
-    "oldbuild:main": "rollup reactive-react/index.js -f umd -n reactive-react -o build/reactive-react.umd.js",
+    "build:module": "rollup -c -f es -n reactivereact -o build/reactivereact.es.js",
+    "oldbuild:module": "rollup reactivereact/index.js -f es -n reactivereact -o build/reactivereact.es.js",
+    "build:main": "rollup -c -f umd -n reactivereact -o build/reactivereact.umd.js",
+    "oldbuild:main": "rollup reactivereact/index.js -f umd -n reactivereact -o build/reactivereact.umd.js",
     "build": "run-p build:module build:main",
     "prepublishOnly": "npm run build"
   },

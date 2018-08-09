@@ -1,6 +1,6 @@
 /** @jsx createElement */
-import {mount, createElement, Component, createHandler} from './reactive-react'
-import {Interval, scan, startWith, merge, mapToConstant} from './reactive-react/swyxjs'
+import {mount, createElement, Component, createHandler} from './reactivereact'
+import {Interval, scan, startWith, merge, mapToConstant} from './reactivereact/swyxjs'
 import Observable from 'zen-observable'
 
 
