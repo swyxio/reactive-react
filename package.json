@@ -8,10 +8,10 @@
     "virtual-dom": "^2.1.1",
     "zen-observable": "^0.8.9"
   },
-  "main": "dist/reactive-react.umd.js",
-  "module": "dist/reactive-react.es.js",
+  "main": "build/reactive-react.umd.js",
+  "module": "build/reactive-react.es.js",
   "files": [
-    "dist"
+    "build"
   ],
   "devDependencies": {
     "ava": "^0.19.0",
@@ -24,14 +24,17 @@
     "browser-env": "^2.0.29",
     "npm-run-all": "^4.0.2",
     "parcel-bundler": "^1.9.7",
-    "rollup": "^0.41.6"
+    "rollup": "^0.41.6",
+    "rollup-plugin-babel": "^3.0.7"
   },
   "scripts": {
     "start": "parcel index.html",
     "start:time": "parcel demos/time-slicing/index.html",
-    "demo:time": "parcel build demos/time-slicing/index.html -d demos/time-slicing/dist/",
-    "build:module": "rollup src/reactive-react.js -f es -n reactive-react -o dist/reactive-react.es.js",
-    "build:main": "rollup src/reactive-react.js -f umd -n reactive-react -o dist/reactive-react.umd.js",
+    "demo:time": "parcel build demos/time-slicing/index.html -d demos/time-slicing/build/",
+    "build:module": "rollup -c -f es -n reactive-react -o build/reactive-react.es.js",
+    "oldbuild:module": "rollup reactive-react/index.js -f es -n reactive-react -o build/reactive-react.es.js",
+    "build:main": "rollup -c -f umd -n reactive-react -o build/reactive-react.umd.js",
+    "oldbuild:main": "rollup reactive-react/index.js -f umd -n reactive-react -o build/reactive-react.umd.js",
     "build": "run-p build:module build:main",
     "prepublishOnly": "npm run build"
   },
