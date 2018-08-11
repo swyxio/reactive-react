@@ -2,11 +2,11 @@
 import babel from 'rollup-plugin-babel';
 
 export default {
-  entry: 'reactivereact/index.js',
-  dest: 'build/reactivereact.js',
+  entry: 'reactive-react/index.js',
+  dest: 'build/reactive-react.js',
   format: 'iife',
   sourceMap: 'inline',
-  moduleName: 'reactivereact',
+  moduleName: 'reactive-react',
   plugins: [
     babel({
       babelrc: false,

@@ -1,10 +1,10 @@
 import { createElement, createHandler } from "./element";
 import { Component } from "./component";
-// import { INITIALSOURCE } from "./reconciler";
+import { renderStream } from "./reconciler"
 import { mount } from "./scheduler";
 
 export default {
-  // INITIALSOURCE,
+  renderStream,
   createElement,
   createHandler,
   Component,
@@ -12,5 +12,5 @@ export default {
 };
 
 export { createElement, createHandler, Component, 
-  // INITIALSOURCE, 
+  renderStream, 
   mount };

@@ -3,9 +3,9 @@ import {fromEvent, scan, merge, startWith, switchLatest} from './swyxjs'
 // import { updateDomProperties } from "./updateProperties";
 import { TEXT_ELEMENT } from "./element";
 import { createPublicInstance } from "./component";
-var h = require('virtual-dom/h');
-// var VNode = require("virtual-dom/vnode/vnode")
-var VText = require("virtual-dom/vnode/vtext")
+import h from 'virtual-dom/h'
+// import VNode from "virtual-dom/vnode/vnode"
+import VText from "virtual-dom/vnode/vtext"
 
 // const circuitBreakerflag = false // set true to enable debugger in infinite loops
 // let circuitBreaker = -50

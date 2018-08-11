@@ -1,15 +1,15 @@
 /** @jsx createElement */
-import {mount, createElement, Component, createHandler} from './reactivereact'
-import {Interval, scan, startWith, merge, mapToConstant} from './reactivereact/swyxjs'
+import {mount, createElement, Component, createHandler} from './reactive-react'
+import {Interval, scan, startWith, merge, mapToConstant} from './reactive-react/swyxjs'
 import Observable from 'zen-observable'
 
 
 function App() {
-  return <Counter name="Counter Count:"/>
+  // return <Counter name="Counter Count:"/>
   // return <Counters/>
   // return <Timer />
   // return <Blink ms={500} />
-  // return <CrappyBird />
+  return <CrappyBird />
   // return <Source />
 }
 

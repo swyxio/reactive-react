@@ -1,10 +1,10 @@
 import Observable from 'zen-observable'
 import {fromEvent, scan, merge, startWith, switchLatest} from './swyxjs'
-var diff = require('virtual-dom/diff');
-var patch = require('virtual-dom/patch');
-var createElement = require('virtual-dom/create-element');
-var { createChangeEmitter } = require('change-emitter')
-var { renderStream } = require('./reconciler')
+import diff from 'virtual-dom/diff';
+import patch from 'virtual-dom/patch';
+import createElement from 'virtual-dom/create-element';
+import { createChangeEmitter } from 'change-emitter'
+import { renderStream } from './reconciler'
 
 export const stateMapPointer = new Map()
 
