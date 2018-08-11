@@ -3,6 +3,9 @@ import {mount, createElement, Component, createHandler} from '../../reactive-rea
 import * as d3 from "d3";
 
 const colors = ['#fff489', '#fa57c1', '#b166cc', '#7572ff', '#69a6f9'];
+const containerWidth = 565 / 2
+const containerHeight = 400 / 2
+
 
 export default class Charts extends Component {
   render() {
@@ -15,15 +18,15 @@ export default class Charts extends Component {
     return (
       <div>
         <h2 style={{textAlign: 'center'}}>number of datapoints: {data[0].length * 5}</h2>
-        <div style={{display: 'flex', paddingBottom: 20}}>
+        <div style={{display: 'flex', paddingBottom: 20, justifyContent: 'center'}}>
           <div className="leftchart"></div>
           <div className="rightchart"></div>
         </div>
         <div
           style={{
             display: 'flex',
-            position: 'relative',
-            // top: '-50px',
+            position: 'relative'
+            , justifyContent: 'center'
           }}>
           <div className="bottomchart"></div>
         </div>
@@ -64,8 +67,8 @@ function responsivefy(svg) {
 function bottomChart(data) {
 
   var margin = { top: 10, right: 20, bottom: 30, left: 30 };
-  var width = 565 * 2 - margin.left - margin.right;
-  var height = 400 - margin.top - margin.bottom;
+  var width = containerWidth * 2 - margin.left - margin.right;
+  var height = containerHeight - margin.top - margin.bottom;
 
   // really janky clearance
   const temp = d3.select(".bottomchart")
@@ -128,8 +131,8 @@ function bottomChart(data) {
 function rightChart(data) {
 
   var margin = { top: 10, right: 20, bottom: 30, left: 30 };
-  var width = 565 - margin.left - margin.right;
-  var height = 400 - margin.top - margin.bottom;
+  var width = containerWidth - margin.left - margin.right;
+  var height = containerHeight - margin.top - margin.bottom;
 
   // really janky clearance
   const temp = d3.select(".rightchart")
@@ -191,8 +194,8 @@ function rightChart(data) {
 function leftChart(data) {
 
   var margin = { top: 10, right: 20, bottom: 30, left: 30 };
-  var width = 565 - margin.left - margin.right;
-  var height = 400 - margin.top - margin.bottom;
+  var width = containerWidth - margin.left - margin.right;
+  var height = containerHeight - margin.top - margin.bottom;
 
   // really janky clearance
   const temp = d3.select(".leftchart")

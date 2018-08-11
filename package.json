@@ -29,7 +29,7 @@
   },
   "scripts": {
     "start": "npm run demo:start",
-    "demo:start": "parcel demos/index.html",
+    "demo:start": "parcel demos/index.html --no-hmr",
     "demo:build": "parcel build demos/index.html -d demos/dist",
     "OLDOLDOLDstart:time": "parcel demos/time-slicing/index.html",
     "OLDOLDOLDdemo:time": "parcel build demos/time-slicing/index.html -d demos/time-slicing/build/",

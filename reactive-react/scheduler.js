@@ -8,7 +8,7 @@ import { renderStream } from './reconciler'
 
 export const stateMapPointer = new Map()
 
-const circuitBreakerflag = true // set true to enable debugger in infinite loops
+const circuitBreakerflag = !true // set true to enable debugger in infinite loops
 let circuitBreaker = -200
 
 const emitter = createChangeEmitter()

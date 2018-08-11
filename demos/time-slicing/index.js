@@ -10,7 +10,7 @@ import './index.css';
 
 let cachedData = new Map();
 
-export class App extends Component {
+export default class App extends Component {
   initialState = ''
 
   // Random data for the chart

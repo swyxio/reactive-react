@@ -7,7 +7,7 @@ import h from 'virtual-dom/h'
 // import VNode from "virtual-dom/vnode/vnode"
 import VText from "virtual-dom/vnode/vtext"
 
-const circuitBreakerflag = true // set true to enable debugger in infinite loops
+const circuitBreakerflag = !true // set true to enable debugger in infinite loops
 let circuitBreaker = -500
 // traverse all children and collect a stream of all sources
 // AND render. a bit of duplication, but we get persistent instances which is good
@@ -56,8 +56,9 @@ export function render(source, addToStream, markNewStream) { // this is the nonr
       newInstance = { dom, element, childInstances };
     } else { // component element
       let publicInstance 
-      // debugger
-      if (instance && instance.publicInstance && instance.element === element) { // might have to do more diffing of props
+      // might have to do more diffing of props in future; further research needed
+      // used to compare instance.element === element; this proved too easy to be false so went for types
+      if (instance && instance.publicInstance && instance.element.type === element.type) { 
         // just reuse old instance if it already exists
         publicInstance = instance && instance.publicInstance
       } else {
