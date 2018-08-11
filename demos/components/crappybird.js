@@ -3,6 +3,14 @@ import {mount, createElement, Component, createHandler} from '../../reactive-rea
 import {Interval, scan, startWith, merge, mapToConstant} from '../../reactive-react/swyxjs'
 import Observable from 'zen-observable'
 
+const btnStyle = {
+  padding: "10px 20px",
+  backgroundColor: "palegoldenrod",
+  borderRadius: "10px",
+  fontSize: "large",
+  margin: "10px",
+}
+
 export default class CrappyBird extends Component {
   // merging time and coutner
   initialState = {
@@ -30,8 +38,9 @@ export default class CrappyBird extends Component {
   render(state, stateMap) {
     const {input, target} = state
     return <div>
-        <button onClick={this.increment}>+</button>
-        <h1>Crappy bird</h1>
+        <h4>Crappy bird</h4>
+        <p>Match the bird to the target!</p>
+        <button style={btnStyle}  onClick={this.increment}>+</button>
         <p>Bird: <input type="range" value={input} min={0} max={100} /></p>
         <p>Target: <input type="range" value={Math.round(target)} min={0} max={100} /></p>
       </div>

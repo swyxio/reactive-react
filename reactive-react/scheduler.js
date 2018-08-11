@@ -15,7 +15,6 @@ const emitter = createChangeEmitter()
 // single UI thread; this is the observable that sticks around and swaps out source
 const UIthread = new Observable(observer => {
   emitter.listen(x => {
-    // debugger // success! thread switching!
     observer.next(x)
   })
 })
@@ -45,6 +44,7 @@ export function mount(rootElement, container) {
       const source2$ = scan(
         src$, 
         ({instance, stateMap}, nextState) => {
+          console.log({nextState})
           const streamOutput = renderStream(rootElement, instance, nextState, stateMap)
           if (streamOutput.isNewStream) { // quick check
             const nextSource$ = streamOutput.source

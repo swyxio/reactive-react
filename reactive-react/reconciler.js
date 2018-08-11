@@ -64,6 +64,7 @@ export function render(source, addToStream, markNewStream) { // this is the nonr
       } else {
         markNewStream() // mark as dirty in parent scope; will rerender
         if (circuitBreakerflag && circuitBreaker++ > 0) debugger
+        if (stateMap.has(publicInstance)) stateMap.delete(publicInstance)
         publicInstance = createPublicInstance(element);
       }
       let localState = stateMap.get(publicInstance)

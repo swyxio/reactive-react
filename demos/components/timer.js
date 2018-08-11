@@ -8,7 +8,7 @@ export default class Timer extends Component {
   initialState = 0
   source($) {
     const source = Interval(this.props.ms) // tick every second
-    const reducer = x => x + 1 // count up
+    const reducer = x => x + 0.5 // count up
     // source returns an observable
     return scan(source, reducer, 0) // from zero
   }
