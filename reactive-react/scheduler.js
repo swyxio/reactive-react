@@ -8,7 +8,8 @@ import { renderStream } from './reconciler'
 
 export const stateMapPointer = new Map()
 
-let circuitBreaker = -20
+const circuitBreakerflag = true // set true to enable debugger in infinite loops
+let circuitBreaker = -200
 
 const emitter = createChangeEmitter()
 // single UI thread; this is the observable that sticks around and swaps out source
@@ -39,6 +40,7 @@ export function mount(rootElement, container) {
   return SoS.subscribe(
     src$ => { // this is the current sourceStream we are working with
       if (currentSrc$) console.log('unsub!') || currentSrc$.unsubscribe() // unsub from old stream
+      if (circuitBreakerflag && circuitBreaker++ > 0) debugger
       /**** main */
       const source2$ = scan(
         src$, 
@@ -46,7 +48,6 @@ export function mount(rootElement, container) {
           const streamOutput = renderStream(rootElement, instance, nextState, stateMap)
           if (streamOutput.isNewStream) { // quick check
             const nextSource$ = streamOutput.source
-            // debugger
             instancePointer = streamOutput.instance
             patch(rootNode, diff(instance.dom, instancePointer.dom)) // render to screen
             emitter.emit(nextSource$) // update the UI thread; source will switch

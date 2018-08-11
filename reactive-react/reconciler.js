@@ -7,8 +7,8 @@ import h from 'virtual-dom/h'
 // import VNode from "virtual-dom/vnode/vnode"
 import VText from "virtual-dom/vnode/vtext"
 
-// const circuitBreakerflag = false // set true to enable debugger in infinite loops
-// let circuitBreaker = -50
+const circuitBreakerflag = true // set true to enable debugger in infinite loops
+let circuitBreaker = -500
 // traverse all children and collect a stream of all sources
 // AND render. a bit of duplication, but we get persistent instances which is good
 export function renderStream(element, instance, state, stateMap) {
@@ -32,7 +32,7 @@ export function render(source, addToStream, markNewStream) { // this is the nonr
     const { type, props } = element
   
     const isDomElement = typeof type === "string";
-    // if (circuitBreakerflag && circuitBreaker++ > 0) debugger
+    if (circuitBreakerflag && circuitBreaker++ > 0) debugger
     const {children = [], ...rest} = props
     if (isDomElement) {
       const childInstances = children.map(
@@ -62,6 +62,7 @@ export function render(source, addToStream, markNewStream) { // this is the nonr
         publicInstance = instance && instance.publicInstance
       } else {
         markNewStream() // mark as dirty in parent scope; will rerender
+        if (circuitBreakerflag && circuitBreaker++ > 0) debugger
         publicInstance = createPublicInstance(element);
       }
       let localState = stateMap.get(publicInstance)
