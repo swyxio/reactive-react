@@ -4,25 +4,16 @@ In this alternate universe, Observables became a part of Javascript.
 
 We take a minimal implementation of Observables, zen-observable.
 
-The React API we are targeting looks something like this:
+
+# Try it out
+
+`yarn start` to run the demo locally
+
+# The `reactive-react` API
+
+The React API we are targeting looks something like this (see `/demos` for actual examples):
 
 ```js
-function Counters() {
-  // demonstrate independent states
-  return <div>
-    <Counter name="counter a" />
-    <Counter name="counter b" />
-    </div>
-}
-function Source() {
-  // demonstrate ability to switch sources
-  return <SourceSwitching 
-          // left={<Counter name="counter b" />} 
-          left={<Timer ms={1000}/>} 
-          right={<Counter name="counter a" />}
-        />
-}
-
 class Counter extends Component {
   // demonstrate basic counter
   initialState = 0
@@ -39,6 +30,23 @@ class Counter extends Component {
         {name}: {state}
         <button onClick={this.increment}>+</button>
         <button onClick={this.decrement}>-</button>
+      </div>
+  }
+}
+
+// taking info from event handler
+class Echo extends Component {
+  handler = createHandler(e => e.target.value)
+  initialState = 'hello world'
+  source($) {
+    const source = this.handler.$
+    const reducer = (acc, n) => n
+    return {source, reducer}
+  }
+  render(state, prevState) {
+    return <div>
+        <input value={state} onInput={this.handler}/>
+        {state}
       </div>
   }
 }
@@ -73,11 +81,8 @@ class Blink extends Component {
   }
 }
 
-
-
-
 class CrappyBird extends Component {
-  // merging time and coutner
+  // merging time and counter
   initialState = {
     input: 50,
     target: 50
@@ -111,6 +116,21 @@ class CrappyBird extends Component {
   }
 }
 
+function Counters() {
+  // demonstrate independent states
+  return <div>
+    <Counter name="counter a" />
+    <Counter name="counter b" />
+    </div>
+}
+function Source() {
+  // demonstrate ability to switch sources
+  return <SourceSwitching 
+          left={<Timer ms={1000}/>} 
+          right={<Counter name="counter a" />}
+        />
+}
+
 class SourceSwitching extends Component {
   initialState = true
   toggle = createHandler()
@@ -120,7 +140,6 @@ class SourceSwitching extends Component {
     return {source, reducer}
   }
   render(state, stateMap) {
-    console.log({state})
     return <div>
         <button onClick={this.toggle}>Toggle</button>
         {
@@ -130,21 +149,8 @@ class SourceSwitching extends Component {
   }
 }
 
-// taking info from event handler
-class Echo extends Component {
-  handler = createHandler(e => e.target.value)
-  initialState = 'hello world'
-  source($) {
-    const source = this.handler.$
-    const reducer = (acc, n) => n
-    return {source, reducer}
-  }
-  render(state, prevState) {
-    return <div>
-        <input value={state} onInput={this.handler}/>
-        {state}
-      </div>
-  }
-}
-
 ```
+
+# Local development
+
+`yarn run build` and then `npm publish` (but its under my namespace @swyx/reactive-react cos someone else has the generic one)

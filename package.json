@@ -28,13 +28,13 @@
     "rollup-plugin-babel": "^3.0.7"
   },
   "scripts": {
-    "start": "parcel index.html",
-    "start:time": "parcel demos/time-slicing/index.html",
-    "demo:time": "parcel build demos/time-slicing/index.html -d demos/time-slicing/build/",
+    "start": "npm run demo:start",
+    "demo:start": "parcel demos/index.html",
+    "demo:build": "parcel build demos/index.html -d demos/dist",
+    "OLDOLDOLDstart:time": "parcel demos/time-slicing/index.html",
+    "OLDOLDOLDdemo:time": "parcel build demos/time-slicing/index.html -d demos/time-slicing/build/",
     "build:module": "rollup -c -f es -n reactive-react -o build/reactive-react.es.js",
-    "oldbuild:module": "rollup reactive-react/index.js -f es -n reactive-react -o build/reactive-react.es.js",
     "build:main": "rollup -c -f umd -n reactive-react -o build/reactive-react.umd.js",
-    "oldbuild:main": "rollup reactive-react/index.js -f umd -n reactive-react -o build/reactive-react.umd.js",
     "build": "run-p build:module build:main",
     "prepublishOnly": "npm run build"
   },

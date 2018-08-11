@@ -19,7 +19,7 @@ export class Component {
       // there are two forms of return the subreducer can have
       // straight stream form
       // or object form where we need to scan it into string
-      if (subReducer.source && subReducer.reducer) { // object form
+      if (subReducer.source) { // object form
         subReducer = scan(subReducer.source, 
           subReducer.reducer || ((_, n) => n), 
           this.initialState[k]
