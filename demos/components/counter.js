@@ -3,6 +3,8 @@ import {mount, createElement, Component, createHandler} from '../../reactive-rea
 import {Interval, scan, startWith, merge, mapToConstant} from '../../reactive-react/swyxjs'
 import Observable from 'zen-observable'
 
+import './button.css'
+
 const btnStyle = {
   padding: "10px 20px",
   backgroundColor: "palegoldenrod",
@@ -27,8 +29,8 @@ export default class Counter extends Component {
         <p>
         {name}: {state}
         </p>
-        <button style={btnStyle } onClick={this.increment}>+</button>
-        <button style={btnStyle }  onClick={this.decrement}>-</button>
+        <a href="#" data-icon="✆" className="button blue brackets" onClick={this.increment} style={{paddingLeft: 10}}>+</a>
+        <a href="#" data-icon="✆" className="button blue brackets" onClick={this.decrement} style={{paddingLeft: 10}}>-</a>
       </div>
   }
 }

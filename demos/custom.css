@@ -2,3 +2,6 @@ body {
   background: rgb(2,0,36);
   background: linear-gradient(45deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 23%, rgba(161,0,0,1) 100%);
 }
+.container {
+  width: 700px
+}
