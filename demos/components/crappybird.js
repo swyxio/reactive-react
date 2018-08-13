@@ -6,9 +6,8 @@ import Observable from 'zen-observable'
 const btnStyle = {
   padding: "10px 20px",
   backgroundColor: "palegoldenrod",
-  borderRadius: "10px",
+  borderRadius: "5px",
   fontSize: "large",
-  margin: "10px",
 }
 
 export default class CrappyBird extends Component {
@@ -38,11 +37,33 @@ export default class CrappyBird extends Component {
   render(state, stateMap) {
     const {input, target} = state
     return <div>
-        <h4>Crappy bird</h4>
-        <p>Match the bird to the target!</p>
-        <button style={btnStyle}  onClick={this.increment}>+</button>
-        <p>Bird: <input type="range" value={input} min={0} max={100} /></p>
-        <p>Target: <input type="range" value={Math.round(target)} min={0} max={100} /></p>
+        <h4>Crappy Bird: <small>Match the bird to the target!</small></h4>
+        <div style={{display: 'grid', gridTemplateColumns: '150px auto auto'}}>
+          <div>{ Math.abs(input - target) < 20 ? '👍 Good 👍' : '☠️ LOSING! ☠️'}</div>
+          <div style={{textAlign: 'center'}}>Bird</div>
+          <div style={{textAlign: 'center'}}>Target</div>
+          <div style={{display: 'grid', alignItems: 'center', justifyContent: 'center'}}>
+            <button style={btnStyle} onClick={this.increment}>+</button>
+          </div>
+          <div style={{height: 400, backgroundColor: 'rgba(0,0,0,0.3)'}}>
+            <div style={{paddingTop: (100 - input) * 3}}>
+              <div style={{fontSize: '3em', backgroundColor: 'rgba(80,0,0,0.3)'}}>
+              💩
+              </div>
+            </div>
+          </div>
+          <div style={{height: 400, backgroundColor: 'rgba(0,0,0,0.3)'}}>
+            <div style={{paddingTop: (100 - target) * 3}}>
+              <div style={{fontSize: '3em', backgroundColor: 'rgba(0,80,0,0.3)'}}>
+              🎯
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
   }
 }
+
+
+        // {/* <p>Bird: <input type="range" value={input} min={0} max={100} /></p>
+        // <p>Target: <input type="range" value={Math.round(target)} min={0} max={100} /></p> */}

@@ -37,10 +37,10 @@ class App extends Component {
               <header>
                 <ul className="nav">
                     <li><a href="#" {...selectedLink('counter')} onClick={this.router}>Counter
-                      <small>Data stream</small>
+                      <small>Data</small>
                     </a></li>
                     <li><a href="#" {...selectedLink('timer')} onClick={this.router}>Timer
-                      <small>Time stream</small>
+                      <small>Time</small>
                     </a></li>
                     <li><a href="#" {...selectedLink('crappy')} onClick={this.router}>Crappy Bird
                       <small>Data + Time</small>
