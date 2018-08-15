@@ -43,7 +43,8 @@ export default class CrappyBird extends Component {
           <div style={{textAlign: 'center'}}>Bird</div>
           <div style={{textAlign: 'center'}}>Target</div>
           <div style={{display: 'grid', alignItems: 'center', justifyContent: 'center'}}>
-            <button style={btnStyle} onClick={this.increment}>+</button>
+            {/* <button style={btnStyle} onClick={this.increment}>+</button> */}
+            <a href="#" data-icon="✆" className="button blue brackets" onClick={this.increment} style={{paddingLeft: 10}}>+</a>
           </div>
           <div style={{height: 400, backgroundColor: 'rgba(0,0,0,0.3)'}}>
             <div style={{paddingTop: (100 - input) * 3}}>

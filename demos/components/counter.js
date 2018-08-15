@@ -30,7 +30,7 @@ export default class Counter extends Component {
         {name}: {state}
         </p>
         <a href="#" data-icon="✆" className="button blue brackets" onClick={this.increment} style={{paddingLeft: 10}}>+</a>
-        <a href="#" data-icon="✆" className="button blue brackets" onClick={this.decrement} style={{paddingLeft: 10}}>-</a>
+        {/* <a href="#" data-icon="✆" className="button blue brackets" onClick={this.decrement} style={{paddingLeft: 10}}>-</a> */}
       </div>
   }
 }
