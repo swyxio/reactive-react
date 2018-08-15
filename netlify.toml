@@ -10,6 +10,6 @@ ID = "reactive-react"
   # This is the directory that you are publishing from (relative to root of your repo)
   publish = "demos/dist/"
   # This will be your default build command
-  command = "yarn demo:build"
+  command = "npm run demo:build"
   # This is where we will look for your lambda functions
   # functions = "project/functions/"
