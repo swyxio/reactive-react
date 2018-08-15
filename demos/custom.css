@@ -8,3 +8,11 @@ html {
 .container {
   width: 700px
 }
+
+.titleLink {
+  display: flex
+}
+
+.titleLink a {
+  padding-left: 10px;
+}

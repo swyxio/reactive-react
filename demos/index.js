@@ -32,7 +32,7 @@ class App extends Component {
     return <div className="container">
               <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <div style={{color: 'yellow'}}>reactive-react <small>Demo: {state}</small></div>
-                <div style={{display: 'flex'}}>
+                <div className="titleLink">
                   <a href="https://twitter.com/swyx" style={{color: 'white'}}>@swyx</a>
                   <a href="https://github.com/sw-yx/async-render-toolbox" style={{color: 'white'}}>☢️</a>
                   <a href="https://swyx.io/ReactRally" style={{color: 'white'}}>Slides</a>
