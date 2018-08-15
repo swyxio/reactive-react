@@ -30,10 +30,10 @@ class App extends Component {
       }
     }
     return <div className="container">
-              {/* <div style={{display: 'flex', justifyContent: 'space-between'}}>
+              <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <div style={{color: 'yellow'}}>reactive-react <small>Demo: {state}</small></div>
                 <a href="https://github.com/sw-yx/reactive-react" style={{color: 'white'}}>Github</a>
-              </div> */}
+              </div>
               <header>
                 <ul className="nav">
                     <li><a href="#" {...selectedLink('counter')} onClick={this.router}>Counter
