@@ -32,6 +32,8 @@ class App extends Component {
     return <div className="container">
               <div style={{display: 'flex', justifyContent: 'space-between'}}>
                 <div style={{color: 'yellow'}}>reactive-react <small>Demo: {state}</small></div>
+                <a href="https://twitter.com/swyx" style={{color: 'white'}}>@swyx</a>
+                <a href="https://swyx.io/ReactRally" style={{color: 'white'}}>Slides</a>
                 <a href="https://github.com/sw-yx/reactive-react" style={{color: 'white'}}>Github</a>
               </div>
               <header>
@@ -51,6 +53,9 @@ class App extends Component {
                 </ul>
               </header>
               {Display()}
+              <footer style={{height: '5em'}}>
+                By swyx
+              </footer>
             </div>
   }
 }
