@@ -6,7 +6,7 @@ import Observable from 'zen-observable'
 import _ from 'lodash';
 import Charts from './Charts';
 // import Clock from './Clock';
-import './index.css';
+// import './index.css';
 
 let cachedData = new Map();
 

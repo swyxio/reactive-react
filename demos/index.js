@@ -17,8 +17,8 @@ class App extends Component {
   render(state) {
     const Display = {
       'counter': () => <Counter name="Counter Count"/>,
-      'timer': () => <Timer />,
-      // 'blink': () => <Blink ms={500} />,
+      // 'timer': () => <Timer />,
+      'blink': () => <Blink ms={500} />,
       'crappy': () => <CrappyBird />,
       'charts': () => <CrazyCharts />,
     }[state] || (() => <Counter name="Counter Count:"/>)
@@ -44,7 +44,10 @@ class App extends Component {
                     <li><a href="#" {...selectedLink('counter')} onClick={this.router}>Counter
                       <small>Data</small>
                     </a></li>
-                    <li><a href="#" {...selectedLink('timer')} onClick={this.router}>Timer
+                    {/* <li><a href="#" {...selectedLink('timer')} onClick={this.router}>Timer
+                      <small>Time</small>
+                    </a></li> */}
+                    <li><a href="#" {...selectedLink('blink')} onClick={this.router}>Blink
                       <small>Time</small>
                     </a></li>
                     <li><a href="#" {...selectedLink('crappy')} onClick={this.router}>Crappy Bird
