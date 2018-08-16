@@ -44,7 +44,6 @@ export function mount(rootElement, container) {
       const source2$ = scan(
         src$, 
         ({instance, stateMap}, nextState) => {
-          console.log({nextState})
           const streamOutput = renderStream(rootElement, instance, nextState, stateMap)
           if (streamOutput.isNewStream) { // quick check
             const nextSource$ = streamOutput.source

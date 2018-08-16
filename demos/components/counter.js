@@ -5,21 +5,14 @@ import Observable from 'zen-observable'
 
 import './button.css'
 
-const btnStyle = {
-  padding: "10px 20px",
-  backgroundColor: "palegoldenrod",
-  borderRadius: "10px",
-  fontSize: "large",
-  margin: "10px",
-}
-
 export default class Counter extends Component {
   // demonstrate basic counter
   initialState = 0
   increment = createHandler(e => 1)
-  decrement = createHandler(e => -1)
+  // decrement = createHandler(e => -1)
   source($) {
-    const source = merge(this.increment.$, this.decrement.$)
+    // const source = merge(this.increment.$, this.decrement.$)
+    const source = this.increment.$
     const reducer = (acc, n) => acc + n
     return {source, reducer}
   }
