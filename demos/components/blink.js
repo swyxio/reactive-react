@@ -7,7 +7,7 @@ export default class Blink extends Component {
   // more fun time demo
   initialState = true
   source($) {
-    const reducer = (_, x) => !x
+    const reducer = x => !x
     const source = Interval(1000) // tick every second
     return {source, reducer}
   }
