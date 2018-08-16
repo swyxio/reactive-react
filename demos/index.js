@@ -20,7 +20,7 @@ class App extends Component {
       // 'timer': () => <Timer />,
       'blink': () => <Blink ms={500} />,
       'crappy': () => <CrappyBird />,
-      // 'charts': () => <CrazyCharts />,
+      'charts': () => <CrazyCharts />,
     }[state] || (() => <Counter name="Counter Count:"/>)
 
     function selectedLink(name) {

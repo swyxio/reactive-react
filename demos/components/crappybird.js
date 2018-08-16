@@ -28,7 +28,7 @@ export default class CrappyBird extends Component {
         const source = Interval(200)
         const reducer = (acc) => {
           const int = acc + Math.random() * 8 - 4
-          return int - (int-50)/30 // bias toward 50
+          return int - (int-50)/40 // bias toward 50
         }
         return {source, reducer}
       }
