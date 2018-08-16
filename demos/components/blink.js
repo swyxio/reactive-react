@@ -7,11 +7,9 @@ export default class Blink extends Component {
   // more fun time demo
   initialState = true
   source($) {
-    const reducer = x => !x
-    // tick every ms milliseconds
-    const source = Interval(this.props.ms) 
-    // source can also return an observable
-    return scan(source, reducer, true)
+    const reducer = (_, x) => !x
+    const source = Interval(1000) // tick every second
+    return {source, reducer}
   }
   render(state) {
     const style = {display: state ? 'block' : 'none'}
