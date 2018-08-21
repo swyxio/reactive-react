@@ -156,3 +156,7 @@ class SourceSwitching extends Component {
 # Local development
 
 `yarn run build` and then `npm publish` (but its under my namespace @swyx/reactive-react cos someone else has the generic one)
+
+Here is the project structure:
+
+![dependencygraph.svg](dependencygraph.svg)

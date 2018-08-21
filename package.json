@@ -31,11 +31,10 @@
     "start": "npm run demo:start",
     "demo:start": "parcel demos/index.html --no-hmr",
     "demo:build": "parcel build demos/index.html -d demos/dist",
-    "OLDOLDOLDstart:time": "parcel demos/time-slicing/index.html",
-    "OLDOLDOLDdemo:time": "parcel build demos/time-slicing/index.html -d demos/time-slicing/build/",
+    "build:deptree": "depcruise --exclude '^node_modules' --output-type dot reactive-react | dot -T svg > dependencygraph.svg",
     "build:module": "rollup -c -f es -n reactive-react -o build/reactive-react.es.js",
     "build:main": "rollup -c -f umd -n reactive-react -o build/reactive-react.umd.js",
-    "build": "run-p build:module build:main",
+    "build": "run-p build:module build:main build:deptree",
     "prepublishOnly": "npm run build"
   },
   "babel": {

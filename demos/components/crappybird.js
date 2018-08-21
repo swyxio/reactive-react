@@ -3,13 +3,6 @@ import {mount, createElement, Component, createHandler} from '../../reactive-rea
 import {Interval, scan, startWith, merge, mapToConstant} from '../../reactive-react/swyxjs'
 import Observable from 'zen-observable'
 
-const btnStyle = {
-  padding: "10px 20px",
-  backgroundColor: "palegoldenrod",
-  borderRadius: "5px",
-  fontSize: "large",
-}
-
 export default class CrappyBird extends Component {
   // merging time and coutner
   initialState = {
