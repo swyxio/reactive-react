@@ -1,5 +1,13 @@
 This is a prototype mockup of a "Reactive" version of React. Do not use unless you are swyx.
 
+## Watch the React Rally talk
+
+Talk video: https://www.youtube.com/watch?v=nyFHR0dDZo0
+
+TL;DR with writeup: https://www.swyx.io/ReactRally
+
+## Description
+
 **Note: we are aware of the double subscribe bug when a source is switched. didnt have time to figure out the fix before react rally. Blink tag example has a hacky patch for this.**
 
 In this alternate universe, Observables became a part of Javascript.
